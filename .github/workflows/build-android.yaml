@@ -2,6 +2,19 @@ name: build_android
 
 on:
   workflow_call:
+    secrets:
+      ANDROID_KEYSTORE_PATH:
+        required: true
+        description: "ANDROID_KEYSTORE_PATH"
+      ANDROID_KEYSTORE_PASSWORD:
+        required: true
+        description: "ANDROID_KEYSTORE_PASSWORD"
+      ANDROID_KEYSTORE_ALIAS:
+        required: true
+        description: "ANDROID_KEYSTORE_ALIAS"
+      ANDROID_KEYSTORE_BASE64:
+        required: true
+        description: "ANDROID_KEYSTORE_ALIAS"
     inputs:
       flutter_channel:
         required: false
@@ -18,22 +31,6 @@ on:
         type: string
         description: "Working Directory"
         default: "."
-      ANDROID_KEYSTORE_PATH:
-        required: true
-        type: string
-        description: "ANDROID_KEYSTORE_PATH"
-      ANDROID_KEYSTORE_PASSWORD:
-        required: true
-        type: string
-        description: "ANDROID_KEYSTORE_PASSWORD"
-      ANDROID_KEYSTORE_ALIAS:
-        required: true
-        type: string
-        description: "ANDROID_KEYSTORE_ALIAS"
-      ANDROID_KEYSTORE_BASE64:
-        required: true
-        type: string
-        description: "ANDROID_KEYSTORE_ALIAS"
 
 jobs:
   build:
