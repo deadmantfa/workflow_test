@@ -13,7 +13,7 @@ jobs:
       flutter_version: 3.0.0
 
   workflow_dispatch:    
-    uses: deadmantfa/workflow_test/.github/workflows/build-android.yml@v1
+    uses: deadmantfa/workflow_test/.github/workflows/build-android.yml@v1.2
     with:
         token: ${{ secrets.PERSONAL_TOKEN }}
         inputs: '{ "flutter_channel": "stable", "flutter_version": "3.0.0" }'
