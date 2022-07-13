@@ -35,10 +35,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_PATH }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
 
     steps:
       - name: 📚 Git Checkout
@@ -50,6 +46,13 @@ jobs:
         with:
           filename: key.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
@@ -63,8 +66,6 @@ jobs:
           flutter pub global activate very_good_cli
           very_good --analytics false
           very_good packages get --recursive
-          echo "{ANDROID_KEYSTORE_PATH}={${{ steps.android_keystore.outputs.filePath }}}" >> $GITHUB_ENV
-          echo "${{ env.ANDROID_KEYSTORE_PATH }}"
 
       - name: ✨ Build APK - Staging
         run: flutter build apk --split-per-abi --flavor staging --target lib/main_staging.dart
