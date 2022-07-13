@@ -3,6 +3,7 @@ name: Workflow Main
 on: [ pull_request, push ]
 
 jobs:
+  environment: Staging
   semantic-pull-request:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 
@@ -12,15 +13,11 @@ jobs:
       flutter_channel: stable
       flutter_version: 3.0.0
 
-  workflow_dispatch:
+  android_build:
     if: ${{ always() && (needs.semantic-pull-request.result=='success' || needs.test.result=='success') }}
     needs: ['semantic-pull-request', 'test']
     uses: ./.github/workflows/build-android.yaml
-    secrets:
-      ANDROID_KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_PATH }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
-      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+    secrets: inherit
     with:
       flutter_channel: stable
       flutter_version: 3.0.0
