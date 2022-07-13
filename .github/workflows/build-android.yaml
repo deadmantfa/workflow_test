@@ -56,7 +56,7 @@ jobs:
           flutter pub global activate very_good_cli
           very_good --analytics false
           very_good packages get --recursive
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > ~/upload-keystore.jks
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > /home/runner/work/workflow_test/workflow_test/android/app/upload-keystore.jks
 
       - name: ✨ Build APK - Staging
         run: flutter build apk --split-per-abi --flavor staging --target lib/main_staging.dart
