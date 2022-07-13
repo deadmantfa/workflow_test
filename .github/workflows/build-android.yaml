@@ -2,10 +2,6 @@ name: build_android
 
 on:
   workflow_call:
-    secrets:
-      ANDROID_KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_PATH }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
     inputs:
       flutter_channel:
         required: false
@@ -22,31 +18,30 @@ on:
         type: string
         description: "Working Directory"
         default: "."
-  workflow_dispatch:
-    inputs:
-      flutter_channel:
-        required: false
+      ANDROID_KEYSTORE_PATH:
+        required: true
         type: string
-        description: "Flutter Channel"
-        default: "stable"
-      flutter_version:
-        required: false
+        description: "ANDROID_KEYSTORE_PATH"
+      ANDROID_KEYSTORE_PASSWORD:
+        required: true
         type: string
-        description: "Flutter Version"
-        default: "3.0.0"
-      working_directory:
-        required: false
+        description: "ANDROID_KEYSTORE_PASSWORD"
+      ANDROID_KEYSTORE_ALIAS:
+        required: true
         type: string
-        description: "Working Directory"
-        default: "."
+        description: "ANDROID_KEYSTORE_ALIAS"
+      ANDROID_KEYSTORE_BASE64:
+        required: true
+        type: string
+        description: "ANDROID_KEYSTORE_ALIAS"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_PATH }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+      ANDROID_KEYSTORE_PATH: ${{ inputs.ANDROID_KEYSTORE_PATH }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ inputs.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEYSTORE_ALIAS: ${{ inputs.ANDROID_KEYSTORE_ALIAS }}
 
     steps:
       - name: 📚 Git Checkout
@@ -60,7 +55,7 @@ jobs:
           cache: true
 
       - name: ✨ Key Convert
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/key.jks
+        run: echo "${{ inputs.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/key.jks
 
       - name: 📦 Install Dependencies
         run: |
