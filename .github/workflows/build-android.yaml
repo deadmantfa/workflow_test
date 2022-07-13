@@ -25,10 +25,6 @@ on:
 
 jobs:
   build:
-    defaults:
-      run:
-        working-directory: ${{inputs.working_directory}}
-
     runs-on: ubuntu-latest
     env:
       KEY_JKS: ${{ secrets.KEY_JKS }}
