@@ -12,7 +12,8 @@ jobs:
       flutter_channel: stable
       flutter_version: 3.0.0
 
-  workflow_dispatch:    
+  workflow_dispatch:
+    if: ${{ success() }}
     uses: ./.github/workflows/build-android.yaml
     with:
       flutter_channel: stable
