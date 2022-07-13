@@ -1,0 +1,72 @@
+name: build_android
+
+on:
+  workflow_run:
+    workflows: [ "Workflow Main" ]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      flutter_channel:
+        required: false
+        type: string
+        description: "Flutter Channel"
+        default: "stable"
+      flutter_version:
+        required: false
+        type: string
+        description: "Flutter Version"
+        default: "3.0.0"
+      working_directory:
+        required: false
+        type: string
+        description: "Working Directory"
+        default: "."
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: ${{inputs.working_directory}}
+
+    runs-on: ubuntu-latest
+    env:
+      KEY_JKS: ${{ secrets.KEY_JKS }}
+      KEY_PATH: “key.jks”
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      ALIAS_PASSWORD: ${{ secrets.ALIAS_PASSWORD }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v2
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{inputs.flutter_version}}
+          channel: ${{inputs.flutter_channel}}
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: |
+          flutter pub global activate very_good_cli
+          very_good --analytics false
+          very_good packages get --recursive
+
+      - name: ✨ Build APK - Staging
+        run: flutter build apk --split-per-abi --flavor staging --target lib/main_staging.dart
+
+      - name: 🕵️ Build ABB - Staging
+        run: flutter build appbundle --flavor staging --target lib/main_staging.dart
+
+      - name: Create github artifact release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: “build/app/outputs/apk/release/*.apk,build/app/outputs/bundle/release/app-release.aab”
+          token: ${{ secrets.GITHUB_TOKEN }} # this is automatically provided by github
+
+      - name: Upload app bundle artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: appbundle
+          path: build/app/outputs/bundle/release/app-release.aab
