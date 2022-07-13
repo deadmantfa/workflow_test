@@ -36,9 +36,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_KEYSTORE_PATH: ${{ inputs.ANDROID_KEYSTORE_PATH }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ inputs.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEYSTORE_ALIAS: ${{ inputs.ANDROID_KEYSTORE_ALIAS }}
+      ANDROID_KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_PATH }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
 
     steps:
       - name: 📚 Git Checkout
@@ -52,7 +52,7 @@ jobs:
           cache: true
 
       - name: ✨ Key Convert
-        run: echo "${{ inputs.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/key.jks
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/key.jks
 
       - name: 📦 Install Dependencies
         run: |
