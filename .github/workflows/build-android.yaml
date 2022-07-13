@@ -44,6 +44,13 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v2
 
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          filename: key.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -56,7 +63,8 @@ jobs:
           flutter pub global activate very_good_cli
           very_good --analytics false
           very_good packages get --recursive
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > /home/runner/work/workflow_test/workflow_test/android/app/upload-keystore.jks
+          echo "{ANDROID_KEYSTORE_PATH}={${{ steps.android_keystore.outputs.filePath }}}" >> $GITHUB_ENV
+          echo "${{ env.ANDROID_KEYSTORE_PATH }}"
 
       - name: ✨ Build APK - Staging
         run: flutter build apk --split-per-abi --flavor staging --target lib/main_staging.dart

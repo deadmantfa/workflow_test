@@ -63,21 +63,21 @@ android {
     }
 
     signingConfigs {
-        if (System.getenv("ANDROID_KEYSTORE_PATH").toString()) {
-            release {
-                storeFile file(System.getenv("ANDROID_KEYSTORE_PATH").toString())
-                keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS").toString()
-                keyPassword System.getenv("ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD").toString()
-                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD").toString()
-            }
-        } else {
+//        if (System.getenv("ANDROID_KEYSTORE_PATH").toString()) {
+//            release {
+//                storeFile file(System.getenv("ANDROID_KEYSTORE_PATH").toString())
+//                keyAlias System.getenv("ANDROID_KEYSTORE_ALIAS").toString()
+//                keyPassword System.getenv("ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD").toString()
+//                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD").toString()
+//            }
+//        } else {
             release {
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
                 storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
                 storePassword keystoreProperties['storePassword']
             }
-        }
+//        }
     }
 
     flavorDimensions "default"
