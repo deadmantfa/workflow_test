@@ -54,11 +54,6 @@ jobs:
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEYSTORE_ALIAS }}" >> android/key.properties
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -84,4 +79,4 @@ jobs:
           name: android-output
           path: |
             build/app/outputs/bundle/**/*.aab
-            build/app/outputs/**/*.apk
+            build/app/outputs/flutter-apk/*.apk
