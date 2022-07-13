@@ -13,11 +13,12 @@ jobs:
       flutter_version: 3.0.0
 
   android_build:
+    runs-on: ubuntu-latest
     environment: Staging
     if: ${{ always() && (needs.semantic-pull-request.result=='success' || needs.test.result=='success') }}
-    needs: ['semantic-pull-request', 'test']
-    uses: ./.github/workflows/build-android.yaml
-    secrets: inherit
-    with:
-      flutter_channel: stable
-      flutter_version: 3.0.0
+    needs: [ 'semantic-pull-request', 'test' ]
+    steps:
+      - uses: ./.github/workflows/build-android.yaml
+        with:
+          flutter_channel: stable
+          flutter_version: 3.0.0
