@@ -1,6 +1,23 @@
 name: build_android
 
 on:
+  workflow_call:
+    inputs:
+      flutter_channel:
+        required: false
+        type: string
+        description: "Flutter Channel"
+        default: "stable"
+      flutter_version:
+        required: false
+        type: string
+        description: "Flutter Version"
+        default: "3.0.0"
+      working_directory:
+        required: false
+        type: string
+        description: "Working Directory"
+        default: "."
   workflow_run:
     workflows: [ "Workflow Main" ]
     types:
