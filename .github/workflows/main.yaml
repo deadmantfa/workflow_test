@@ -6,14 +6,15 @@ jobs:
   semantic-pull-request:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 
-  build:
+  test:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_channel: stable
       flutter_version: 3.0.0
 
   workflow_dispatch:
-    if: success()
+    if: ${{ always() && (needs.semantic-pull-request.result=='success' || needs.test.result=='success') }}
+    needs: ['semantic-pull-request', 'test']
     uses: ./.github/workflows/build-android.yaml
     secrets:
       ANDROID_KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_PATH }}
