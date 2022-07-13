@@ -15,5 +15,4 @@ jobs:
   workflow_dispatch:    
     uses: ./.github/workflows/build-android.yaml
     with:
-        token: "${{ secrets.PAT }}"
         inputs: '{ "flutter_channel": "stable", "flutter_version": "3.0.0" }'
