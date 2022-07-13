@@ -84,4 +84,4 @@ jobs:
           name: android-output
           path: |
             build/app/outputs/bundle/**/*.aab
-            build/app/outputs/bundle/**/*.apk
+            build/app/outputs/**/*.apk
