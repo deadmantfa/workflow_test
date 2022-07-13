@@ -67,9 +67,6 @@ jobs:
           very_good --analytics false
           very_good packages get --recursive
 
-      - name: ✨ Build APK - Staging
-        run: flutter build apk --split-per-abi --flavor staging --target lib/main_staging.dart
-
       - name: 🕵️ Build ABB - Staging
         run: flutter build appbundle --flavor staging --target lib/main_staging.dart
 
@@ -79,4 +76,3 @@ jobs:
           name: android-output
           path: |
             build/app/outputs/bundle/**/*.aab
-            build/app/outputs/flutter-apk/*.apk
