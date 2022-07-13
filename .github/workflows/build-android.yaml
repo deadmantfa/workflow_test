@@ -51,14 +51,12 @@ jobs:
           channel: ${{inputs.flutter_channel}}
           cache: true
 
-      - name: ✨ Key Convert
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/key.jks
-
       - name: 📦 Install Dependencies
         run: |
           flutter pub global activate very_good_cli
           very_good --analytics false
           very_good packages get --recursive
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > ~/upload-keystore.jks
 
       - name: ✨ Build APK - Staging
         run: flutter build apk --split-per-abi --flavor staging --target lib/main_staging.dart
